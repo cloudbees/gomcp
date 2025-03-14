@@ -12,11 +12,14 @@ func (s *SdkServerDefinition) serverInitFunction(ctx context.Context, logger typ
 	var result interface{}
 	var callErr, err error
 
+	// create a new context with the logger
+	goCtx := types.ContextWithLogger(ctx, logger)
+
 	// check if we have a tool configuration data
 	if s.toolConfigurationData != nil {
-		result, callErr, err = callFunction(s.toolsInitFunction, ctx, s.toolConfigurationData)
+		result, callErr, err = callFunction(s.toolsInitFunction, goCtx, s.toolConfigurationData)
 	} else {
-		result, callErr, err = callFunction(s.toolsInitFunction, ctx)
+		result, callErr, err = callFunction(s.toolsInitFunction, goCtx)
 	}
 	if err != nil {
 		return err
