@@ -15,6 +15,7 @@ type SdkServerDefinition struct {
 	serverVersion         string
 	debugLevel            string
 	debugFile             string
+	instructions          *string
 	toolConfigurationData interface{}
 	toolsInitFunction     interface{}
 	toolDefinitions       []*SdkToolDefinition
@@ -65,6 +66,10 @@ func (s *SdkServerDefinition) ServerVersion() string {
 	return s.serverVersion
 }
 
+func (s *SdkServerDefinition) Instructions() *string {
+	return s.instructions
+}
+
 func (s *SdkServerDefinition) SetDebugLevel(debugLevel string, debugFile string) {
 	s.debugLevel = debugLevel
 	s.debugFile = debugFile
@@ -85,10 +90,14 @@ func (s *SdkServerDefinition) DebugFile() string {
 	return s.debugFile
 }
 
-func (s *SdkServerDefinition) WithTools(toolConfigurationDate interface{}, toolsInitFunction interface{}) types.ToolsDefinition {
-	s.toolConfigurationData = toolConfigurationDate
+func (s *SdkServerDefinition) WithTools(toolConfigurationData interface{}, toolsInitFunction interface{}) types.ToolsDefinition {
+	s.toolConfigurationData = toolConfigurationData
 	s.toolsInitFunction = toolsInitFunction
 	return s
+}
+
+func (s *SdkServerDefinition) SetInstructions(instructions string) {
+	s.instructions = &instructions
 }
 
 func (s *SdkServerDefinition) AddTool(toolName string, description string, toolHandler interface{}) error {

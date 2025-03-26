@@ -9,11 +9,13 @@ type JsonRpcResponseInitializeResult struct {
 	ProtocolVersion string             `json:"protocolVersion"`
 	Capabilities    ServerCapabilities `json:"capabilities"`
 	ServerInfo      ServerInfo         `json:"serverInfo"`
+	Instructions    *string            `json:"instructions"`
 }
 
 type ServerInfo struct {
-	Name    string `json:"name"`
-	Version string `json:"version"`
+	Name         string  `json:"name"`
+	Version      string  `json:"version"`
+	Instructions *string `json:"instructions,omitempty"`
 }
 
 type ServerCapabilities struct {
@@ -73,6 +75,14 @@ func ParseJsonRpcResponseInitialize(response *jsonrpc.JsonRpcResponse) (*JsonRpc
 		return nil, err
 	}
 	resp.ServerInfo.Version = version
+
+	// read instructions are present
+	instructions := protocol.GetOptionalStringField(serverInfo, "instructions")
+	if instructions != nil {
+		resp.Instructions = instructions
+	} else {
+		resp.Instructions = nil
+	}
 
 	// read capabilities
 	capabilities, err := protocol.CheckIsObject(result, "capabilities")

@@ -18,6 +18,7 @@ type JsonRpcRequestInitializeParams struct {
 	ProtocolVersion string             `json:"protocolVersion"`
 	Capabilities    ClientCapabilities `json:"capabilities"`
 	ClientInfo      ClientInfo         `json:"clientInfo"`
+	Instructions    *string            `json:"instructions,omitempty"`
 }
 
 type ClientCapabilities struct {

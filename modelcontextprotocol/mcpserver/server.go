@@ -15,6 +15,7 @@ type McpServer struct {
 	logger        types.Logger
 	serverName    string
 	serverVersion string
+	instructions  *string
 	handler       modelcontextprotocol.McpServerEventHandler
 	// used by protocol
 	clientName          string
@@ -55,10 +56,15 @@ func NewMcpSdkServer(serverDefinition types.McpSdkServerDefinition, debug bool) 
 		logger:        logger,
 		serverName:    sdkServerDefinition.ServerName(),
 		serverVersion: sdkServerDefinition.ServerVersion(),
+		instructions:  sdkServerDefinition.Instructions(),
 		handler:       mcpServerNotifications,
 		lastRequestId: 0,
 	}, nil
 
+}
+
+func (mcp *McpServer) Logger() types.Logger {
+	return mcp.logger
 }
 
 func (mcp *McpServer) StdioTransport() types.Transport {

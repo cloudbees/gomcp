@@ -147,7 +147,9 @@ func (m *McpServer) EventMcpRequestInitialize(params *mcp.JsonRpcRequestInitiali
 			"expected": mcp.ProtocolVersion,
 			"received": params.ProtocolVersion,
 		})
-		m.jsonRpcTransport.SendError(jsonrpc.RpcInvalidRequest, "protocol version mismatch", reqId)
+
+		s := fmt.Sprintf("protocol version mismatch: expected %s, received %s", mcp.ProtocolVersion, params.ProtocolVersion)
+		m.jsonRpcTransport.SendError(jsonrpc.RpcInvalidRequest, "protocol version mismatch: "+s, reqId)
 		return
 	}
 	// we store the client information
@@ -165,7 +167,8 @@ func (m *McpServer) EventMcpRequestInitialize(params *mcp.JsonRpcRequestInitiali
 				ListChanged: jsonrpc.BoolPtr(true),
 			},
 		},
-		ServerInfo: mcp.ServerInfo{Name: m.serverName, Version: m.serverVersion},
+		ServerInfo:   mcp.ServerInfo{Name: m.serverName, Version: m.serverVersion},
+		Instructions: m.instructions,
 	}
 	m.jsonRpcTransport.SendJsonRpcResponse(&response, reqId)
 }
