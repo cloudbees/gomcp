@@ -142,7 +142,7 @@ func (m *McpServer) handleIncomingMessage(
 
 func (m *McpServer) EventMcpRequestInitialize(params *mcp.JsonRpcRequestInitializeParams, reqId *jsonrpc.JsonRpcRequestId) {
 	// store client information
-	if params.ProtocolVersion != mcp.ProtocolVersion {
+	if params.ProtocolVersion < mcp.ProtocolVersion {
 		m.logger.Error("protocol version mismatch", types.LogArg{
 			"expected": mcp.ProtocolVersion,
 			"received": params.ProtocolVersion,
